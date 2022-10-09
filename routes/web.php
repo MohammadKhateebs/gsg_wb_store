@@ -20,6 +20,7 @@ Route::get('/', [HomeController::class, 'index']);
 Route::get('/dashboard/order', [DashboardController::class, 'orders']);
 Route::get('/dashboard/product', [DashboardController::class, 'products']);
 Route::get('/dashboard/setting', [DashboardController::class, 'settings']);
+Route::get('/dashboard', [DashboardController::class, 'index']);
 
 //CRUD :Read,Crate,Update,Delete
 Route::group([
@@ -27,7 +28,6 @@ Route::group([
     'as' => 'dashboard.',
     'namespace' => 'Dashboard'
 ], function () {
-    Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::prefix('/categories')->as('categories.')->group(function () {
         Route::get('/', [CategoriesController::class, 'index'])
             ->name('index');

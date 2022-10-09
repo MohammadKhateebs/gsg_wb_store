@@ -6,14 +6,27 @@ use App\Models\category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Unique;
 
 class CategoriesController extends Controller
 {
     public function index()
     {
         //select * from categories
-
-        $categories = category::all();
+        //if you wente to show the name of name for forginkey id
+        //can use jline to join tow column and show the name of parent id
+        // so go ..
+        $categories = category::leftJoin('categories as parents', 'parents.id', '=', 'categories.parent_id')
+            ->select([
+                'categories.*',
+                'parents.name as parent_name'
+            ])
+            ->orderBy('name')
+            //to review sql statment use dd()
+            // ->dd();
+            ->get();
+        // $categories = category::all();
 
         return view('dashboard.categories.index', [
             'enteries' => $categories,
@@ -26,10 +39,49 @@ class CategoriesController extends Controller
 
         return view('dashboard.categories.create', [
             'parents' => $parents,
+            'category'=>new category(),
         ]);
     }
     public function store(Request $request)
     {
+        //Validiton
+        //Laravel Validtion
+        //use validate() to validation the forme
+        //Throw validationExption do redirect back to page with error
+     $rules=$this->rules();
+     $message =$this->message();
+        // $rules = [
+        //     // 'name of input '=>'Condtion',
+        //     //if use parameter use :
+        //     'name' => 'required|string|max:255|',
+        //     //exists : use to check if data exite in table
+
+        //     'parent_id' => 'nullable |int|exists:categories,id',
+        //     'description' => 'nullable|string|min:5',
+        //     'image' => 'nullable|mimes:jpg,png|max:300000|
+        //         dimensions:min_width=150,min_hight=150,
+        //         max_width=150,max_hight=150', //kb
+        // ];
+        // $this->validate($request,$rules);
+        $request->validate($rules,$message);
+
+
+        // $request->validate([
+        //     // 'name of input '=>'Condtion',
+        //     //if use parameter use :
+        //     'name'=>'required|string|max:255|',
+        //     //exists : use to check if data exite in table
+
+        //     'parent_id'=>'nullable |int|exists:categories,id',
+        //     'description'=>'nullable|string|min:5',
+        //     'image'=>'nullable|mimes:jpg,png|max:300000|
+        //     dimensions:min_width=150,min_hight=150,
+        //     max_width=150,max_hight=150',//100kb
+        // ]);
+
+
+
+
         //with out mass assiment
         // $category = new Category();
         // $category->name = $request->input('name');
@@ -85,6 +137,21 @@ class CategoriesController extends Controller
     }
     public function update(Request $request, $id)
     {
+        $rules=$this->rules($id);
+        // $rules = [
+        //     // 'name of input '=>'Condtion',
+        //     //if use parameter use :
+        //     'name' => 'required|string|max:255|',
+        //     //exists : use to check if data exite in table
+
+        //     'parent_id' => 'nullable |int|exists:categories,id',
+        //     'description' => 'nullable|string|min:5',
+        //     'image' => 'nullable|mimes:jpg,png|max:300000|
+        //         dimensions:min_width=150,min_hight=150,
+        //         max_width=150,max_hight=150', //kb
+        // ];
+        // $this->validate($request,$rules);
+        $request->validate($rules);
         // $category=category::find($id);
         // $category->name = $request->input('name');
         // $category->slug = Str::slug($category->name);
@@ -110,6 +177,35 @@ class CategoriesController extends Controller
 
         category::destroy($id);
         return redirect()->route('dashboard.categories.index');
+    }
+    protected function rules($id=0){
+        return [
+            // 'name of input '=>'Condtion',
+            //if use parameter use :
+            // 'name' => 'required|string|max:255|unique:categories,name,'.$id,
+           'name'=>[
+            'required',
+            'string',
+            'max:255',
+            // 'unique:categories,name,'.$id,
+            Rule::unique('categories','name')->ignore($id,'id'),
+            // (new Unique('categories','name'))->ignore($id,'id'),
 
+           ],
+            //exists : use to check if data exite in table
+
+            'parent_id' => 'nullable |int|exists:categories,id',
+            'description' => 'nullable|string|min:5',
+            'image' => 'nullable|mimes:jpg,png|max:300000|
+                dimensions:min_width=150,min_hight=150,
+                max_width=150,max_hight=150', //kb
+        ];
+        // $this->validate($request,$rules);
+
+    }
+    protected function message(){
+        return [
+            "name.required"=>":attribute Is Empty pleas fill it !"
+        ];
     }
 }

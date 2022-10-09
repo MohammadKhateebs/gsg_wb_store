@@ -18,6 +18,7 @@
                     <th>Name</th>
                     <th>Parent</th>
                     <th>Created At</th>
+                    <th>description</th>
                     <th>Image</th>
                     <th colspan="2">Action</th>
                 </tr>
@@ -27,17 +28,18 @@
                     <tr>
                     <td>{{ $item->id }}</td>
                     <td>{{ $item->name }}</td>
-                    <td>{{ $item->parent_id }}</td>
+                    <td>{{ $item->parent_name}}</td>
                     <td>{{ $item->created_at }}</td>
+                    <td>{{$item->description  }}</td>
                     <td>{{ $item->image}}</td>
                     <td>
-                        <a href="{{ route('dashboard.categories.edit',$item->id) }}" class="btn btn-success">Edite</a>
+                        <a href="{{ route('dashboard.categories.edit',$item->id) }}" class="btn btn-outline-success">Edite</a>
                     </td>
                     <td>
                         <form action="{{ route('dashboard.categories.destroy',$item->id) }}" method="post">
                             @csrf
                             @method('delete')
-                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <button type="submit" class="btn btn-outline-danger">Delete</button>
 
                         </form>
                     </td>

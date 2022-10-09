@@ -1,5 +1,10 @@
 <?php
 return [
+    'DashBoard'=>[
+        'title' => 'Dashboard',
+        'icon'=>'far fa-circle nav-icon',
+        'route'=>'/dashboard'
+    ],
     // name of page
     'Categories'=>[
         'title' => 'Categories',
