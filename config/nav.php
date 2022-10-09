@@ -1,20 +1,15 @@
 <?php
 return [
     // name of page
-    'Dashboard'=>[
-        'title'=>'Dashboard',
-        'icon'=>'far fa-circle nav-icon',
-        'route'=>'/admin/dashboard'
-    ],
     'Categories'=>[
         'title' => 'Categories',
         'icon'=>'far fa-circle nav-icon',
-        'route'=>'admin/dashboard/categories'
+        'route'=>'/dashboard/categories'
     ],
     'Products'=>[
         'title' => 'Products',
         'icon'=>'far fa-circle nav-icon',
-        'route'=>'admin/dashboard/products',
+        'route'=>'/dashboard/product',
         'badge'=>[
             'class'=>'primary',
             'title'=>'new',
@@ -23,12 +18,12 @@ return [
     'Order'=>[
         'title' => 'Orader',
         'icon'=>'far fa-circle nav-icon',
-        'route'=>'admin/dashboard/order'
+        'route'=>'/dashboard/order'
     ],
     'Setting'=>[
         'title' => 'Setting',
         'icon'=>'far fa-circle nav-icon',
-        'route'=>'admin/dashboard/setting'
+        'route'=>'/dashboard/setting'
     ],
 
 ];
