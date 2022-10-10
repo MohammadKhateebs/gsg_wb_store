@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Unique;
 
@@ -36,21 +37,25 @@ class CategoriesController extends Controller
     }
     public function create()
     {
+
         $parents = category::orderBy('name')->get();
 
         return view('dashboard.categories.create', [
             'parents' => $parents,
-            'category'=>new category(),
+            'category' => new category(),
         ]);
     }
     public function store(Request $request)
     {
+
         //Validiton
         //Laravel Validtion
         //use validate() to validation the forme
         //Throw validationExption do redirect back to page with error
-     $rules=$this->rules();
-     $message =$this->message();
+        $rules = $this->rules();
+        $message = $this->message();
+        $request->validate($rules, $message);
+        //save the file to the database
         // $rules = [
         //     // 'name of input '=>'Condtion',
         //     //if use parameter use :
@@ -64,8 +69,23 @@ class CategoriesController extends Controller
         //         max_width=150,max_hight=150', //kb
         // ];
         // $this->validate($request,$rules);
-        $request->validate($rules,$message);
-
+        //(issets($request->image))
+        //search if the request has a file or no
+        //isValid check if the file is good of upload
+        $data = $request->except('image');
+        if ($request->hasFile('image')) {
+            //file upload with type UploadedFile
+            $file = $request->file('image'); //$request->image
+            // dd($file,$request->post('image'));
+            // dd($file,$request->image);
+            if ($file->isValid()) {
+                //save the file from temporary location  to actual location
+                //    $filepath= $file->store('thumbnails');
+                $data['image'] = $file->store('thumbnails', [
+                    'disk' => 'uploads',
+                ]);
+            }
+        }
 
         // $request->validate([
         //     // 'name of input '=>'Condtion',
@@ -109,16 +129,22 @@ class CategoriesController extends Controller
         // $request->merge([
         //  'slug'=>Str::slug($request->post('name')),
         // ]);
-        $category = Category::create([
-            'name' => $request->name,
-            'parent_id' => $request->input('parent_id'),
-            'slug' => Str::slug($request->name),
-            'description' => $request->post('description'),
+        // dd($data);
+        $data['slug'] = Str::slug($request->name);
+        $category = Category::create(
+            $data
+            // [
+
+            // 'name' => $request->name,
+            // 'parent_id' => $request->input('parent_id'),
+            // 'slug' => Str::slug($request->name),
+            // 'description' => $request->post('description'),
             //To Insert All Data CVome From Requst
             // $request->all(),
             //  $request->except('_token','_method'),
 
-        ]);
+            // ]
+        );
         //PRG :Post Redirect Get
         //Convert any Post Requst To Get
         //redirect is a helper function from laravel
@@ -136,9 +162,15 @@ class CategoriesController extends Controller
 
         return view('dashboard.categories.edit', compact('category', 'parents'));
     }
+
+
     public function update(CategoryRequest $request, $id)
     {
-        $rules=$this->rules($id);
+
+
+
+        // $rules = $this->rules($id);
+        //    $request->validate($rules);
         // $rules = [
         //     // 'name of input '=>'Condtion',
         //     //if use parameter use :
@@ -152,47 +184,79 @@ class CategoriesController extends Controller
         //         max_width=150,max_hight=150', //kb
         // ];
         // $this->validate($request,$rules);
-        $request->validate($rules);
+
         // $category=category::find($id);
         // $category->name = $request->input('name');
         // $category->slug = Str::slug($category->name);
         // $category->parent_id = $request->input('parent_id');
         // $category->description = $request->description;
         // $category->save();
-        $request->merge([
-            'slug' => Str::slug($request->post('name')),
-        ]);
+
+
+        $data = $request->except('image');
+        $data['slug'] = Str::slug($request->name);
         $category = category::findOrFail($id);
-        $category->update($request->all());
+        $old_image = $category->image;
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image'); //$request->image
+            if ($file->isValid()) {
+                $data['image'] = $file->store('thumbnails', [
+                    'disk' => 'uploads',
+                ]);
+                //to save file with orginal name and add th uniqid() to get random number
+                //use storeAS() to save file
+                // $filename=uniqid().'_'.$this->getClientOriginlName();
+                // $file->getSize();//to return size of file
+                // $file->getMimeType();//to return typy of image //image/png,jpg...etc
+                // $file->storeAs('thumbnails',$filename,[
+                //     'disk'=>'uploads',
+                // ]);
+            }
+        }
+
+
+        $category->update($data);
+
+        if ($old_image && $old_image != $category->image) {
+            Storage::disk('uploads')->delete($old_image);
+        }
 
         // category::where('id','=',$id)->update($request->all());
         return redirect()->route('dashboard.categories.index');
     }
+
+
+
     public function destroy($id)
     {
-        // $category = category::find($id);
-        // $category->delete();
+        $category = category::find($id);
+        $category->delete();
+        if ($category->image) {
+            Storage::disk('uploads')->delete($category->image);
+        }
 
 
         // category::where('id', '=', $id);
 
-        category::destroy($id);
+        // category::destroy($id);
         return redirect()->route('dashboard.categories.index');
     }
-    protected function rules($id=0){
+    protected function rules($id = 0)
+    {
         return [
             // 'name of input '=>'Condtion',
             //if use parameter use :
             // 'name' => 'required|string|max:255|unique:categories,name,'.$id,
-           'name'=>[
-            'required',
-            'string',
-            'max:255',
-            // 'unique:categories,name,'.$id,
-            Rule::unique('categories','name')->ignore($id,'id'),
-            // (new Unique('categories','name'))->ignore($id,'id'),
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                // 'unique:categories,name,'.$id,
+                Rule::unique('categories', 'name')->ignore($id, 'id'),
+                // (new Unique('categories','name'))->ignore($id,'id'),
 
-           ],
+            ],
             //exists : use to check if data exite in table
 
             'parent_id' => 'nullable |int|exists:categories,id',
@@ -204,9 +268,10 @@ class CategoriesController extends Controller
         // $this->validate($request,$rules);
 
     }
-    protected function message(){
+    protected function message()
+    {
         return [
-            "name.required"=>":attribute Is Empty pleas fill it !"
+            "name.required" => ":attribute Is Empty pleas fill it !"
         ];
     }
 }

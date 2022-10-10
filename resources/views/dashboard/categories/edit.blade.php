@@ -8,7 +8,7 @@
 @endsection
 @section('content')
 
-<form action="{{ route('dashboard.categories.update',$category->id) }}" method="post">
+<form action="{{ route('dashboard.categories.update',$category->id) }}" method="post" enctype="multipart/form-data">
 
     {{--  Form Method Spoofing  --}}
     {{--  <input type="hidden" name="_method" value="put">  --}}

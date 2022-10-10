@@ -43,6 +43,16 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
+        // Custom Disk
+        //disk : local , ftp ,sftp, s3
+        'uploads'=>[
+            'driver'=>'local',
+            //postion to save file
+            'root'=>public_path('uploads'),
+            //url to postion of url to return the save file  ...
+            'url'=>env('APP_URL').'/uploads',
+            'visibility'=>'public',
+        ],
 
         's3' => [
             'driver' => 's3',
