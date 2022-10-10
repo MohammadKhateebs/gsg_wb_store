@@ -6,6 +6,7 @@ use App\Models\category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Unique;
 
@@ -135,7 +136,7 @@ class CategoriesController extends Controller
 
         return view('dashboard.categories.edit', compact('category', 'parents'));
     }
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
         $rules=$this->rules($id);
         // $rules = [
