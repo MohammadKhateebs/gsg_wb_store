@@ -4,7 +4,7 @@
         <div class="form-group mb-3">
             {{--  if you went to stay all value in form use old() in value  --}}
             <label for="name">Category Name</label>
-            <input type="text" id="name" value="{{ old('name',$category->name) }}" name="name"
+            <input type="text" id="name" value="{{ old('name', $category->name) }}" name="name"
                 class="form-control    @error('name') is-invalid @enderror">
             {{--  @if ($errors->has('name'))
             <p class="text-danger">{{ $errors->first('name') }}</p>
@@ -19,7 +19,7 @@
                 class="form-control  @error('parent_id') is-invalid @enderror ">
                 <option value="">No Parent</option>
                 @foreach ($parents as $parent)
-                    <option value="{{ $parent->id }}" @if ($parent->id == old('parent_id',$category->parent_id)) selected @endif>
+                    <option value="{{ $parent->id }}" @if ($parent->id == old('parent_id', $category->parent_id)) selected @endif>
                         {{ $parent->name }}</option>
                 @endforeach
             </select>
@@ -31,7 +31,7 @@
             <label for="description">Category Description</label>
             <textarea type="text" id="description" name="description"
                 class="form-control  @error('description') is-invalid @enderror">
-                {{ old('description',$category->description) }}
+                {{ old('description', $category->description) }}
         </textarea>
             @error('description')
                 <p class="invalid-feedback">{{ $message }}</p>
@@ -43,10 +43,12 @@
             <label for="image">Thumbnail</label>
             <div class="mb-2">
                 @if ($category->image)
-                <img id="thumbnail" src="{{ Storage::disk('uploads')->url($category->image) }}" alt="" height="150">
+                    <img id="thumbnail" src="{{ Storage::disk('uploads')->url($category->image) }}" alt=""
+                        height="150">
                 @else
-                <img id="thumbnail" src="{{ asset('uploads/default-thumbnail.jpg') }}" alt="" height="150">
-            @endif
+                    <img id="thumbnail" src="{{ asset('uploads/default-thumbnail.jpg') }}" alt=""
+                        height="150">
+                @endif
             </div>
             <input type="file" style="display: none;" id="image" name="image"
                 class="form-control  @error('image') is-invalid @enderror">
@@ -65,18 +67,19 @@
 </div>
 @push('script')
     <script>
-        document.getElementById('thumbnail').addEventListener('click',function(e){
+        //to hide the input and on click at photo start to upload
+        document.getElementById('thumbnail').addEventListener('click', function(e) {
 
-                document.getElementById('image').click();
+            document.getElementById('image').click();
 
 
-           });
+        });
+        //to show prview of photo at moment
+        document.getElementById('image').addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                document.getElementById('thumbnail').src = URL.createObjectURL(this.files[0]);
 
-       document.getElementById('image').addEventListener('change',function(e){
-        if(this.files && this.files[0]){
-            document.getElementById('thumbnail').src=URL.createObjectURL(this.files[0]);
-
-        }
-       });
+            }
+        });
     </script>
 @endpush

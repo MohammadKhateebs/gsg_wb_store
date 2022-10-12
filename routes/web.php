@@ -31,6 +31,8 @@ Route::group([
     Route::prefix('/categories')->as('categories.')->group(function () {
         Route::get('/', [CategoriesController::class, 'index'])
             ->name('index');
+            Route::get('/trash', [CategoriesController::class, 'trash'])
+            ->name('trash');
         Route::get("/create", [CategoriesController::class, 'create'])
             ->name('create');
         //use post to modfication the data (standers requst mothed)
@@ -42,5 +44,9 @@ Route::group([
             ->name('update');
         Route::delete('/{id}', [CategoriesController::class, 'destroy'])
             ->name('destroy');
+            Route::patch('/{id}/restore',[CategoriesController::class,'restore'])
+            ->name('restore');
+
+
     });
 });

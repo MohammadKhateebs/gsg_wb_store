@@ -7,27 +7,36 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Unique;
 
 class CategoriesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         //select * from categories
         //if you wente to show the name of name for forginkey id
         //can use jline to join tow column and show the name of parent id
         // so go ..
+        //category::withTrashed() return all data with delete item
+        //category::onlyTrashed() return only delete item
+        $search = $request->query('search');
         $categories = category::leftJoin('categories as parents', 'parents.id', '=', 'categories.parent_id')
             ->select([
                 'categories.*',
                 'parents.name as parent_name'
             ])
+            ->search($search)
             ->orderBy('name')
             //to review sql statment use dd()
             // ->dd();
+            //to remove globalscope from this quer..
+            // ->withOutGlobalScope('main-categories')
+
             ->get();
+
         // $categories = category::all();
 
         return view('dashboard.categories.index', [
@@ -148,7 +157,9 @@ class CategoriesController extends Controller
         //PRG :Post Redirect Get
         //Convert any Post Requst To Get
         //redirect is a helper function from laravel
-        return redirect()->route('dashboard.categories.index');
+        return redirect()
+            ->route('dashboard.categories.index')
+            ->with('success', "Category ($category->name) Created !");
     }
     public function edit($id)
     {
@@ -222,25 +233,55 @@ class CategoriesController extends Controller
             Storage::disk('uploads')->delete($old_image);
         }
 
+        //Session()->flash('message', "Categor ($category->name) updated");
+        // Session::flash('message', "Categor ($category->name) updated");
+        //   Session::remove('message');
+        // Session::put('message',"Categor ($category->name) updated");
         // category::where('id','=',$id)->update($request->all());
-        return redirect()->route('dashboard.categories.index');
+        return redirect()->route('dashboard.categories.index')
+            ->with('success', "Category ($category->name) Updataed !");;
     }
 
 
 
     public function destroy($id)
     {
-        $category = category::find($id);
-        $category->delete();
-        if ($category->image) {
-            Storage::disk('uploads')->delete($category->image);
+
+        //check the delete type softDelete of forceDelete...
+        $category = category::withTrashed()
+            ->findOrFail($id);
+        //to check can use $category->deleted_at or trashed
+        if ($category->trashed()) {
+            $category->forceDelete();
+            // dont use it in softdelets
+            if ($category->image) {
+                Storage::disk('uploads')->delete($category->image);
+            }
+        } else {
+            $category->delete();
         }
+
+
 
 
         // category::where('id', '=', $id);
 
         // category::destroy($id);
-        return redirect()->route('dashboard.categories.index');
+        return redirect()->route('dashboard.categories.index')
+            ->with('success', "Category ($category->name) deleted !");
+    }
+    public function trash()
+    {
+        //latest retuen the data order from newest to oldist
+        $categories = category::onlyTrashed()->latest('deleted_at')->get();
+        return view('dashboard.categories.trash', compact('categories'));
+    }
+    public function restore(Request $request, $id)
+    {
+        $category = category::onlyTrashed()->findOrFail($id);
+        $category->restore();
+        return redirect()->route('dashboard.categories.index')
+            ->with('success', "Category ($category->name) Restore !");
     }
     protected function rules($id = 0)
     {
