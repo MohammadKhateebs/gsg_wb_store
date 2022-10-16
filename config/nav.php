@@ -14,7 +14,7 @@ return [
     'Products'=>[
         'title' => 'Products',
         'icon'=>'far fa-circle nav-icon',
-        'route'=>'/dashboard/product',
+        'route'=>'/dashboard/products',
         'badge'=>[
             'class'=>'primary',
             'title'=>'new',

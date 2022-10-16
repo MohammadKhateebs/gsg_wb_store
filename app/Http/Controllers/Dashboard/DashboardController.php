@@ -15,10 +15,7 @@ class DashboardController extends Controller
         return view('dashboard.order');
     }
 
-    public function products(){
-        return view('dashboard.products');
 
-    }
     public function settings(){
         return view('dashboard.setting');
     }
