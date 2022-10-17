@@ -53,7 +53,7 @@ class ProductsController extends Controller
         //upload image
 
         $data = $request->except('image');
-        $data['slug'] = Str::slug($request->name);
+
         if ($request->hasFile('image')) {
             $file = $request->file('image'); //$request->image
             if ($file->isValid()) {
@@ -120,7 +120,7 @@ class ProductsController extends Controller
                 $data['image'] = $this->upload($request->file('image'));
             }
         }
-        $data['slug'] = Str::slug(($data['name']));
+
         tap($products->image, function ($old_image) use ($products, $data) {
             $products->update($data);
             //tap()
@@ -150,9 +150,6 @@ class ProductsController extends Controller
         $products = Product::withTrashed()->findOrFail($id);
         if ($products->trashed()) {
             $products->forceDelete();
-            if($products->image){
-                Storage::disk('uploads')->delete($products->image);
-            }
         } else {
             $products->delete();
         }

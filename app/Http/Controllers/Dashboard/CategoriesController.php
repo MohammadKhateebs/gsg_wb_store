@@ -139,7 +139,7 @@ class CategoriesController extends Controller
         //  'slug'=>Str::slug($request->post('name')),
         // ]);
         // dd($data);
-        $data['slug'] = Str::slug($request->name);
+
         $category = Category::create(
             $data
             // [
@@ -205,7 +205,7 @@ class CategoriesController extends Controller
 
 
         $data = $request->except('image');
-        $data['slug'] = Str::slug($request->name);
+
         $category = category::findOrFail($id);
         $old_image = $category->image;
 
@@ -254,9 +254,7 @@ class CategoriesController extends Controller
         if ($category->trashed()) {
             $category->forceDelete();
             // dont use it in softdelets
-            if ($category->image) {
-                Storage::disk('uploads')->delete($category->image);
-            }
+
         } else {
             $category->delete();
         }

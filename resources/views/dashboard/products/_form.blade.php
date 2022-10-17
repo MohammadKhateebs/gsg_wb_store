@@ -2,16 +2,17 @@
 <div class="row">
     <div class="col-md-8">
         <div class="form-group mb-3">
-            {{--  if you went to stay all value in form use old() in value  --}}
+            {{--  if you went to stay all value in form use old() in value
             <label for="name">products Name</label>
             <input type="text" id="name" value="{{ old('name', $products->name) }}" name="name"
                 class="form-control    @error('name') is-invalid @enderror">
             {{--  @if ($errors->has('name'))
             <p class="text-danger">{{ $errors->first('name') }}</p>
             @endif  --}}
-            @error('name')
+            {{--  @error('name')
                 <p class="invalid-feedback">{{ $message }}</p>
-            @enderror
+            @enderror  --}}
+            <x-form.input name="name" required="1" id="name" label="Product Name" :value="$products->name " />
         </div>
         <div class="form-group mb-3">
             <label for="category_id">category ID</label>
@@ -31,61 +32,70 @@
         <div class="form-row">
             <div class="col-md-4">
                 <div class="form-groub mb-3">
-
+                    <x-form.input type="number" step="0.1" label="Price" name="price" id="price" :value="$products->price " />
+{{--
                     <label for="price">price</label>
                     <input type="number" step="0.1" id="price" value="{{ old('price', $products->price) }}"
                         name="price" class="form-control    @error('price') is-invalid @enderror">
                     @error('price')
                         <p class="invalid-feedback">{{ $message }}</p>
-                    @enderror
+                    @enderror  --}}
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-groub mb-3">
                     {{--  if you went to stay all value in form use old() in value  --}}
-                    <label for="compare_price">Compare price</label>
+                    {{--  <label for="compare_price">Compare price</label>
                     <input type="number" step="0.1" id="compare_price"
                         value="{{ old('compare_price', $products->compare_price) }}" name="compare_price"
                         class="form-control    @error('compare_price') is-invalid @enderror">
                     @error('compare_price')
                         <p class="invalid-feedback">{{ $message }}</p>
-                    @enderror
+                    @enderror  --}}
+                    <x-form.input type="number" label="compare price" id="compare_price" name="compare_price"  value="{{ $products->compare_price }}" />
+
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-groub mb-3">
+                    <x-form.input type="number" label="Cost"  name="cost" id="cost" value="{{ $products->cost }}" />
+
                     {{--  if you went to stay all value in form use old() in value  --}}
-                    <label for="cost">Cost</label>
+                    {{--  <label for="cost">Cost</label>
                     <input type="number" step="0.1" id="cost" value="{{ old('cost', $products->cost) }}"
                         name="cost" class="form-control    @error('cost') is-invalid @enderror">
                     @error('cost')
                         <p class="invalid-feedback">{{ $message }}</p>
-                    @enderror
+                    @enderror  --}}
                 </div>
             </div>
         </div>
             <div class="form-row">
                 <div class="col-md-6">
                     <div class="form-groub mb-3">
-                        <label for="sku">sku</label>
+                        <x-form.input  label="SKU" id="sku" name="sku" id="sku" value="{{ $products->sku }}" />
+
+                        {{--  <label for="sku">sku</label>
                         <input type="text" id="sku"
                             value="{{ old('sku', $products->sku) }}" name="sku"
                             class="form-control    @error('sku') is-invalid @enderror">
                         @error('sku')
                             <p class="invalid-feedback">{{ $message }}</p>
-                        @enderror
+                        @enderror  --}}
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-groub mb-3">
+                        <x-form.input  label="Barcode" id="barcode" name="barcode"  value="{{ $products->barcode }}" />
 
-                        <label for="barcode">barcode</label>
+
+                        {{--  <label for="barcode">barcode</label>
                         <input type="text"  id="barcode"
                             value="{{ old('barcode', $products->barcode) }}" name="barcode"
                             class="form-control    @error('barcode') is-invalid @enderror">
                         @error('barcode')
                             <p class="invalid-feedback">{{ $message }}</p>
-                        @enderror
+                        @enderror  --}}
                     </div>
                 </div>
             </div>
@@ -108,14 +118,16 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-groub mb-3">
+                        <x-form.input  label="quantity" id="quantity" name="quantity"  value="{{ $products->quantity }}" />
 
-                        <label for="quantity">quantity</label>
+
+                        {{--  <label for="quantity">quantity</label>
                         <input type="text"  id="quantity"
                             value="{{ old('quantity', $products->quantity) }}" name="quantity"
                             class="form-control    @error('quantity') is-invalid @enderror">
                         @error('quantity')
                             <p class="invalid-feedback">{{ $message }}</p>
-                        @enderror
+                        @enderror  --}}
                     </div>
                 </div>
             </div>

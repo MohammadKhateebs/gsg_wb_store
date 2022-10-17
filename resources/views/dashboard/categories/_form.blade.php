@@ -28,14 +28,15 @@
             @enderror
         </div>
         <div class="form-group mb-3">
-            <label for="description">Category Description</label>
+            <x-form.textarea label="description" id="description" name="description"  :value="$category->description"/>
+            {{--  <label for="description">Category Description</label>
             <textarea type="text" id="description" name="description"
                 class="form-control  @error('description') is-invalid @enderror">
                 {{ old('description', $category->description) }}
         </textarea>
             @error('description')
                 <p class="invalid-feedback">{{ $message }}</p>
-            @enderror
+            @enderror  --}}
         </div>
     </div>
     <div class="col-md-4">

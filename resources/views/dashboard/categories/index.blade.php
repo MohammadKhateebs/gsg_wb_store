@@ -7,25 +7,26 @@
     <li class="breadcrumb-item active">Categories</li>
 @endsection
 @section('content')
-    @if (session()->has('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session()->get('success') }}
-            <button type="button" class="close " data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
+{{--  its right way but not components  --}}
+ {{--  @include('components.flash-message')  --}}
+
+ <x-flash-message  />
+
+{{--  @php
+    $message='hello world !';
+@endphp
+
     @if (session()->has('message'))
     <div class="alert alert-info alert-dismissible fade show" role="alert">
         {{ session()->get('message') }}
         <button type="button" class="close " data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
-    </div>
+    </div>  --}}
     {{--  @php
     Session()->remove('message');
-    @endphp  --}}
-@endif
+    @endphp
+@endif--}}
     <div class="table-toolbar  mb-3 d-flex justify-content-between">
         <div>
             <form action="{{ route('dashboard.categories.index') }}" class="d-flex" method="get">
@@ -88,11 +89,4 @@
     <!-- /.content -->
 @endsection
 
-@push('script')
-    <script>
-        window.setTimeout(function() {
-            $('.alert').alert('close');
 
-        }, 5000);
-    </script>
-@endpush

@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\MainCategoryScope;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Scopes\MainCategoryScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,8 +24,8 @@ class category extends Model
     //can call multi scope at the one model
     //add where categories.parent_id = null
 
-    protected static function booted()
-    {
+    // protected static function booted()
+    // {
       //  static::addGlobalScope(new MainCategoryScope());
         //   static::addGlobalScope('main-category',function(Builder $builder)
         //   {
@@ -38,13 +40,34 @@ class category extends Model
 
         //  localScope
 
-    }
+    //}
     public function scopeSearch(Builder $builder,$value)
     {
         if($value){
             $builder->where('categories.name', 'LIKE', "%{$value}%");
 
         }
+    }
+    //to use event models
+    protected static function booted(){
+        /*
+        event model =>
+        creating ,created ,updating,updated,saveing,saved
+        deleting,deleted,restoring,restored,forcedeleting,forcedeleted
+        */
+        static::forceDeleted(function($category){
+               // dont use it in softdelets
+               if ($category->image) {
+                Storage::disk('uploads')->delete($category->image);
+            }
+        });
+            static::saving(function($category){
+                $category->slug=Str::slug($category->name);
+
+            });
+
+
+
     }
 
 }
