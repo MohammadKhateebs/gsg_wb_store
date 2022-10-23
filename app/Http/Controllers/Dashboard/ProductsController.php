@@ -13,6 +13,15 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductsController extends Controller
 {
+
+    public function __construct()
+
+    {
+        //if you went to do middlewaer in some route or some page
+           // $this->middleware(['auth'])->except(['index','create']);
+        // $this->middleware(['auth'])->only(['index','create']);
+
+    }
     /**
      * Display a listing of the resource.
      *

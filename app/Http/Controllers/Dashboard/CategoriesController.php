@@ -14,6 +14,12 @@ use Illuminate\Validation\Rules\Unique;
 
 class CategoriesController extends Controller
 {
+public function __construct()
+{
+    //middleware just in constract
+    // $this->middleware(['auth']);
+}
+
     public function index(Request $request)
     {
         //select * from categories

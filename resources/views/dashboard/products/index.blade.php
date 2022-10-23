@@ -8,7 +8,7 @@
 @endsection
 @section('content')
 
-<x-flash-message name="success" class="sucsess"/>
+<x-flash-message name="success" class="success"/>
 {{--  @if (session()->has('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session()->get('success') }}

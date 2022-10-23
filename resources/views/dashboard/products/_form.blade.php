@@ -19,7 +19,7 @@
             <select type="text" id="category_id" name="category_id"
                 class="form-control  @error('category_id') is-invalid @enderror ">
                 <option value="">No category</option>
-                @foreach (\App\Models\category::all() as $category)
+                @foreach (category::all() as $category)
                     <option value="{{ $category->id }}" @if ($category->id == old('category_id', $products->category_id)) selected @endif>
                         {{ $category->name }}</option>
                 @endforeach
