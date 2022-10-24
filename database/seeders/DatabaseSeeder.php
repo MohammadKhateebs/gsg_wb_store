@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Admin;
 use App\Models\category;
 use Illuminate\Database\Seeder;
 
@@ -19,8 +20,8 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         //To run Seeder
         // $this->call(CategoriesTableSeeder::class);
-
-        category::factory(10)->create();
+         \App\Models\Admin::factory(2)->create();
+        // category::factory(10)->create();
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',

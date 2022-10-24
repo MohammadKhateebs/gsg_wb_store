@@ -29,9 +29,9 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request)
     {
         $request->authenticate();
-
+        //to regenerate to privent session attack
         $request->session()->regenerate();
-
+        //intended method if user login page return it after login to same page
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
@@ -44,7 +44,7 @@ class AuthenticatedSessionController extends Controller
     public function destroy(Request $request)
     {
         Auth::guard('web')->logout();
-
+        //delete all data session when the user login
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();

@@ -7,8 +7,9 @@ use App\Models\category;
 use Illuminate\Support\Str;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\UploadedFile;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ProductsController extends Controller
@@ -29,6 +30,8 @@ class ProductsController extends Controller
      */
     public function index()
     {
+        // dd(Auth::user());
+
         $products = Product::all();
         return view('dashboard.products.index', compact('products'));
     }

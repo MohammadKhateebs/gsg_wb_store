@@ -70,7 +70,7 @@
                         </td>
                         <td>
                             <a href="{{ route('dashboard.categories.edit', $item->id) }}"
-                                class="btn btn-outline-success">Edite</a>
+                                class="btn btn-outline-success">Edit</a>
                         </td>
                         <td>
                             <form action="{{ route('dashboard.categories.destroy', $item->id) }}" method="post">

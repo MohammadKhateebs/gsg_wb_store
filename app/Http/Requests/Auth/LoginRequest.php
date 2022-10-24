@@ -43,8 +43,13 @@ class LoginRequest extends FormRequest
      */
     public function authenticate()
     {
+        //Check the number of times trying to login
         $this->ensureIsNotRateLimited();
-
+    //When Use Multi Guard use
+    //Auth ::guard('web')->attempt([
+    //     'email'=>'',
+    //     'password',
+    // ],true* this for remmber me );
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
@@ -52,7 +57,7 @@ class LoginRequest extends FormRequest
                 'email' => trans('auth.failed'),
             ]);
         }
-
+        //clear for limiter
         RateLimiter::clear($this->throttleKey());
     }
 

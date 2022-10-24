@@ -134,7 +134,7 @@
                         {{--  @guest
                             //dosomthing
                         @endguest  --}}
-                        {{--  auth()->user()->name()  --}}
+                        {{--  auth()->user()-> name()  --}}
                         <a href="#"> {{ Auth::user()->name }}</a>
                         | <a href="{{ route('logout') }}" onclick="logoutf()">Logout</a>
                         <form action="{{ route('logout') }}" id="logoutform" style="display:none" method="post">

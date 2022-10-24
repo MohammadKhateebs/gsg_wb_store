@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Admin;
+
 return [
 
     /*
@@ -17,7 +19,10 @@ return [
         'guard' => 'web',
         'passwords' => 'users',
     ],
-
+    // 'defaults' => [
+    //     'guard' => 'admins',
+    //     'passwords' => 'users',
+    // ],
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards
@@ -40,6 +45,14 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'admins'=>[
+            'driver'=>'session',
+            'provider'=>'admins'
+        ],
+        // 'vendor'=>[
+        //     'driver'=>'session',
+        //     'provider'=>'vendors'
+        // ],
     ],
 
     /*
@@ -59,12 +72,17 @@ return [
     |
     */
 
+         //when use model
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' =>App\Models\Admin::class,
+        ],
+        //database
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -90,8 +108,14 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',
-            'expire' => 60,
-            'throttle' => 60,
+            'expire' => 60,//1 houer ,60m
+            'throttle' => 120, //second
+        ],
+        'admins' => [
+            'provider' => 'admins',
+            'table' => 'password_resets',
+            'expire' => 30,//1 houer ,60m
+            'throttle' => 60, //second
         ],
     ],
 
