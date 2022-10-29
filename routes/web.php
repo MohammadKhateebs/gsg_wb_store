@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\ChangeUserPassordController;
+use App\Http\Controllers\Auth\UserProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\CategoriesController;
 use App\Http\Controllers\Dashboard\DashboardController;
@@ -54,6 +56,19 @@ Route::group([
     });
 });
 
+Route::get('/profile',[UserProfileController::class,'index'])
+->name('profile')
+->middleware('auth:web,admin','password.confirm');
+Route::patch('/profile',[UserProfileController::class,'update'])
+->name('profile.update')
+->middleware('auth:web,admin','password.confirm');
+
+Route::get('/change-password',[ChangeUserPassordController::class,'index'])
+->name('change-password')
+->middleware('auth:web,admin');
+Route::put('/change-password',[ChangeUserPassordController::class,'update'])
+->name('change-password.update')
+->middleware('auth:web,admin');
 
 Route::get('/dashboard/breeze', function () {
     return view('dashboard');

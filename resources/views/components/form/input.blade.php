@@ -19,7 +19,7 @@
  {{--  <label for="{{ $id ?? ''}}">{{ $label }}</label>  --}}
 
  @endif
-<input id="{{ $id }}" name="{{ $name }}" {{$attributes->class(['form-control',"is-invalid"=>$errors->has($name)]) }} value="{{ old('$name', $value) }}"
+<input id="{{ $id }}" name="{{ $name }}" type="{{ $type }}" {{$attributes->class(['form-control',"is-invalid"=>$errors->has($name)]) }} value="{{ old('$name', $value) }}"
    {{--  class="form-control    @error($name) is-invalid @enderror"--}}>
 @error($name)
     <p class="invalid-feedback">{{ $message }}</p>

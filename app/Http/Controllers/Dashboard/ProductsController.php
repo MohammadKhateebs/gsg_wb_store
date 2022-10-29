@@ -22,6 +22,8 @@ class ProductsController extends Controller
            // $this->middleware(['auth'])->except(['index','create']);
         // $this->middleware(['auth'])->only(['index','create']);
 
+
+       // $this->middleware(['verified'])->except(['index','show']);
     }
     /**
      * Display a listing of the resource.

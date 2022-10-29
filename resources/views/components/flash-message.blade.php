@@ -1,4 +1,4 @@
-@props(['name'=>'success','class'=>'success '])
+@props(['name'=>'success','class'=>'success'])
 
 
 @if (session()->has($name))
