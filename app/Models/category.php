@@ -69,5 +69,27 @@ class category extends Model
 
 
     }
+    //Accessors : get(Name)Attribute
+    //$category ->image_url
+    public function getImageUrlAttribute(){
+        if(!$this->image){
+            return asset('uploads/default-thumbnail.jpg');
+        }
+        if(Str::startsWith($this->image,['http://','https://'])){
+            return $this->image;
+        }
+        return Storage::disk('uploads')->url($this->image);
+
+    }
+    public function getNameAttribute($value)
+    {
+        return Str::title($value);
+    }
+
+    //Mutatores :set(Name)Attribute
+    public function setNameAttribute($value){
+
+        $this->attributes['name']=Str::upper($value);
+    }
 
 }

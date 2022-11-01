@@ -11,7 +11,7 @@ use App\Http\Controllers\HomeController;
 
 
 
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/dashboard/order', [DashboardController::class, 'orders']);
 Route::get('/dashboard/setting', [DashboardController::class, 'settings']);
 Route::get('/dashboard', [DashboardController::class, 'index']);

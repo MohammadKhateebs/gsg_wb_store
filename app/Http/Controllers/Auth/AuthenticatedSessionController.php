@@ -32,7 +32,16 @@ class AuthenticatedSessionController extends Controller
         //to regenerate to privent session attack
         $request->session()->regenerate();
         //intended method if user login page return it after login to same page
+     $user =Auth::user();
+     if($user ->type=='admin'){
+        return redirect()->intended('/dashboard');
+
+     }
+     else{
         return redirect()->intended(RouteServiceProvider::HOME);
+
+     }
+
     }
 
     /**

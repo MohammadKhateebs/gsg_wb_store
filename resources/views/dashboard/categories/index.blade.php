@@ -62,11 +62,8 @@
                         <td>{{ $item->created_at }}</td>
                         <td>{{ $item->description }}</td>
                         <td>
-                            @if ($item->image)
-                                <img src="{{ Storage::disk('uploads')->url($item->image) }}" alt="" height="60">
-                            @else
-                                <img src="{{ asset('uploads/default-thumbnail.jpg') }}" alt="" height="60">
-                            @endif
+
+                           <img src="{{ $item->image_url }}" height="60">
                         </td>
                         <td>
                             <a href="{{ route('dashboard.categories.edit', $item->id) }}"
